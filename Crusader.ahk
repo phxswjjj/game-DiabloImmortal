@@ -1,4 +1,4 @@
-﻿AppTitle := "Diablo Immortal"
+AppTitle := "Diablo Immortal"
 UniqueID := WinExist(AppTitle)
 if not UniqueID {
     OutputDebug, "[%AppTitle%] not found"
@@ -25,33 +25,30 @@ Return
         Return
     }
 
-    If (Key2ElcapedSec >= 9) {
+    If (Key2ElcapedSec >= 10) {
         Key2ElcapedSec := 0
         Sleep, 64
         Send 2
         Sleep, 64
         Send 2
     }
-    else If (Key3ElcapedSec >= 9) {
+    else If (Key3ElcapedSec >= 4) {
         Key3ElcapedSec := 0
         Sleep, 64
         Send 3
         Sleep, 64
         Send 3
     }
-    else If (Key4ElcapedSec >= 21) {
+    else If (Key4ElcapedSec >= 16) {
         Key4ElcapedSec := 0
         Sleep, 150
         Send 4
         Sleep, 150
         Send 4
     }
-    else if (Key1ElcapedSec >= 13) {
-        Key1ElcapedSec := 0
-        ; Sleep, 150
-        ; Send 1
-        ; Sleep, 150
-        ; Send 1
+    If (Key1ElcapedSec <= 5)
+    {
+        SetTimer, MaMa, OFF
     }
 
     Return
@@ -90,8 +87,34 @@ LifeMonitor:
     {
         Return
     }
-    MouseClick, Right
-    Sleep, 100
+
+    Return
+
+~1::
+    IfWinNotActive, ahk_id %UniqueID%
+    {
+        Return
+    }
+
+    Key1ElcapedSec := 0
+    SetTimer, MaMa, 100
+
+    Return
+
+MaMa:
+    IfWinNotActive, ahk_id %UniqueID%
+    {
+        Return
+    }
+
+    If (GetKeyState("``", "P"))
+    {
+        Send, {Space}
+    }
+    If (Key1ElcapedSec >= 5)
+    {
+        SetTimer, MaMa, OFF
+    }
 
     Return
 
