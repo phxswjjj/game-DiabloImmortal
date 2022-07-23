@@ -5,8 +5,7 @@ if not UniqueID {
     Return
 }
 
-FormatTime, CurrentDateTime,, HH:mm:ss
-
+FormatTime, CurrentDateTime, , HH:mm:ss
 
 Key1ElcapedSec := 99
 Key2ElcapedSec := 99
@@ -16,7 +15,6 @@ SetTimer, Counter, 1000
 
 SetTimer, LifeMonitor, 1000
 
-
 Return
 
 ~Space::
@@ -25,40 +23,42 @@ Return
         Return
     }
 
-    If (Key2ElcapedSec >= 10) {
+    if (Key2ElcapedSec >= 13) {
         Key2ElcapedSec := 0
         Sleep, 64
         Send 2
         Sleep, 64
         Send 2
-    }
-    else If (Key3ElcapedSec >= 4) {
+    }else If (Key3ElcapedSec >= 11) {
         Key3ElcapedSec := 0
         Sleep, 64
         Send 3
         Sleep, 64
         Send 3
-    }
-    else If (Key4ElcapedSec >= 16) {
+    }else If (Key4ElcapedSec >= 16) {
         Key4ElcapedSec := 0
         Sleep, 150
         Send 4
         Sleep, 150
         Send 4
     }
-    If (Key1ElcapedSec <= 5)
-    {
+    if (Key1ElcapedSec <= 5) {
         SetTimer, MaMa, OFF
     }
 
-    Return
+Return
 
 Counter:
+    IfWinNotExist, ahk_id %UniqueID%
+    {
+        OutputDebug, [%CurrentDateTime%] Stopped
+        ExitApp
+    }
     Key1ElcapedSec := Min(Key1ElcapedSec + 1, 100)
     Key2ElcapedSec := Min(Key2ElcapedSec + 1, 100)
     Key3ElcapedSec := Min(Key3ElcapedSec + 1, 100)
     Key4ElcapedSec := Min(Key4ElcapedSec + 1, 100)
-    Return
+Return
 
 LifeMonitor:
     IfWinNotActive, ahk_id %UniqueID%
@@ -67,20 +67,19 @@ LifeMonitor:
     }
 
     PixelSearch, Px, Py, 160, 130, 165, 135, 0x000000, 3, Fast
-    If ErrorLevel {
+    if ErrorLevel {
         ; OutputDebug, 100`% is not black
         Return
     }
-    
+
     PixelSearch, Px, Py, 110, 130, 115, 135, 0x000000, 3, Fast
-    If !ErrorLevel {
+    if !ErrorLevel {
         ; OutputDebug, Life Less Than 50`%
         Send Q
         Sleep, 8000
     }
 
-    Return
-
+Return
 
 ~`::
     IfWinNotActive, ahk_id %UniqueID%
@@ -88,7 +87,7 @@ LifeMonitor:
         Return
     }
 
-    Return
+Return
 
 ~1::
     IfWinNotActive, ahk_id %UniqueID%
@@ -99,7 +98,7 @@ LifeMonitor:
     Key1ElcapedSec := 0
     SetTimer, MaMa, 100
 
-    Return
+Return
 
 MaMa:
     IfWinNotActive, ahk_id %UniqueID%
@@ -107,18 +106,16 @@ MaMa:
         Return
     }
 
-    If (GetKeyState("``", "P"))
-    {
+    if (GetKeyState("``", "P")) {
         Send, {Space}
     }
-    If (Key1ElcapedSec >= 5)
-    {
+    if (Key1ElcapedSec >= 5) {
         SetTimer, MaMa, OFF
     }
 
-    Return
+Return
 
-^!z::  ; Control+Alt+Z hotkey.
+^!z:: ; Control+Alt+Z hotkey.
     OutputDebug, "Z pressed"
     OutputDebug, [%CurrentDateTime%] Stopped
-    ExitApp
+ExitApp
